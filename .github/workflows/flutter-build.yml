@@ -89,8 +89,6 @@ jobs:
 
       - name: Checkout source code
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Restore bridge files
         uses: actions/download-artifact@master
@@ -238,7 +236,7 @@ jobs:
         shell: bash
         run: |
           pip3 install requests argparse
-          BASE_URL=${{ env.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./rustdesk/
+          BASE_URL=\${{ env.SIGN_BASE_URL || '' }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./rustdesk/
 
       - name: Build self-extracted executable
         shell: bash
@@ -269,7 +267,7 @@ jobs:
         if: env.UPLOAD_ARTIFACT == 'true' && env.SIGN_BASE_URL != ''
         shell: bash
         run: |
-          BASE_URL=${{ env.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./SignOutput
+          BASE_URL=\${{ env.SIGN_BASE_URL || '' }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./SignOutput
 
       - name: Publish Release
         uses: softprops/action-gh-release@v1
@@ -404,7 +402,7 @@ jobs:
         shell: bash
         run: |
           pip3 install requests argparse
-          BASE_URL=${{ env.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./Release/
+          BASE_URL=\${{ env.SIGN_BASE_URL || '' }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./Release/
 
       - name: Build self-extracted executable
         shell: bash
@@ -421,7 +419,7 @@ jobs:
         if: env.UPLOAD_ARTIFACT == 'true' && env.SIGN_BASE_URL != ''
         shell: bash
         run: |
-          BASE_URL=${{ env.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./SignOutput/
+          BASE_URL=\${{ env.SIGN_BASE_URL || '' }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./SignOutput/
 
       - name: Publish Release
         uses: softprops/action-gh-release@v1
